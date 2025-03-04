@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const host = process.env.NEXT_PUBLIC_HOST || 'http://localhost:3000'
+const host = process.env.NEXT_PUBLIC_HOST || 'https://pixelwarps.vercel.app'
 
 export async function GET() {
   return new NextResponse(
