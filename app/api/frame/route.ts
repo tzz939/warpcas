@@ -1,8 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-const host = process.env.NEXT_PUBLIC_HOST || 'https://pixelwarps.vercel.app'
+const host = process.env.NEXT_PUBLIC_HOST || 'https://pixelwarps.vercel.app';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   return new NextResponse(
     `
     <!DOCTYPE html>
@@ -33,45 +34,42 @@ export async function GET() {
         'Content-Type': 'text/html',
       },
     },
-  )
+  );
 }
 
-export async function POST(request: Request) {
-  const data = await request.json()
-  console.log('Frame POST data:', data)
+export async function POST(req: NextRequest) {
+  const data = await req.json();
+  console.log('Frame POST data:', data);
   
-  // Get the current state and input from the request
-  const state = data.state || 'initial'
-  const input = data.input || ''
+  const state = data.state || 'initial';
+  const input = data.input || '';
   
-  // Handle different states
   switch (state) {
     case 'initial':
       return NextResponse.json({
         success: true,
         state: 'drawing',
         message: 'Drawing mode activated! Enter coordinates (x,y)'
-      })
+      });
     case 'drawing':
-      // Parse coordinates from input
-      const [x, y] = input.split(',').map(Number)
+      const [x, y] = input.split(',').map(Number);
       if (isNaN(x) || isNaN(y)) {
         return NextResponse.json({
           success: true,
           state: 'drawing',
           message: 'Invalid coordinates. Please enter in format: x,y'
-        })
+        });
       }
       return NextResponse.json({
         success: true,
         state: 'initial',
         message: `Pixel drawn at (${x},${y})!`
-      })
+      });
     default:
       return NextResponse.json({
         success: true,
         state: 'initial',
         message: 'Welcome to Pixel Canvas!'
-      })
+      });
   }
 }
